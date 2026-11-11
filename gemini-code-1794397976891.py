@@ -61,6 +61,9 @@ def grade_question_2(ans_text):
 
     text = ans_text.strip()
 
+    if not text:
+        return 0.0, "❌ 답안 미작성", "❌ 답안 미작성", "❌ 답안 미작성"
+
     # 문장 틀 정규표현식 검사
     # 틀: 광고를 본 사람이 (A) 하게 하려 한다. 그렇게 생각한 근거는 광고의 (B) 때문이다.
     pattern = r"광고를\s*본\s*사람이\s*(.+?)\s*하게\s*하려\s*한다\.\s*그렇게\s*생각한\s*근거는\s*광고의\s*(.+?)\s*때문이다\.?"
@@ -68,7 +71,6 @@ def grade_question_2(ans_text):
 
     if not match:
         fb_format = "❌ 문장 틀 미준수: 제시된 조건의 문장 구조를 정확히 따라 작성해야 합니다."
-        # 틀을 안 지켜도 내용 추출 시도
         part_intent = text
         part_evidence = text
     else:
@@ -122,8 +124,13 @@ with col1:
     st.caption("아래 문장 틀에 맞추어 서술하시오.")
     st.info("💡 **문장 틀:** 광고를 본 사람이 ( A ) 하게 하려 한다. 그렇게 생각한 근거는 광고의 ( B ) 때문이다.")
     
-    default_template = "광고를 본 사람이 가방을 사게 하게 하려 한다. 그렇게 생각한 근거는 광고의 교과서 다섯 권도 거뜬히 들어가는 수납력을 강조했기 때문이다."
-    ans_2 = st.text_area("답안 전체 입력:", value=default_template, height=120)
+    # 예시 답안(value)을 지우고 빈칸 상태로 두고 placeholder로 힌트만 제공
+    ans_2 = st.text_area(
+        "답안 전체 입력:", 
+        value="", 
+        placeholder="광고를 본 사람이 (   ) 하게 하려 한다. 그렇게 생각한 근거는 광고의 (   ) 때문이다.", 
+        height=120
+    )
 
     submit_btn = st.button("🚀 자동 채점 실행", type="primary")
 
